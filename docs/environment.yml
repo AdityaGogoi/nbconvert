@@ -10,3 +10,5 @@ dependencies:
     - sphinx==1.3.6
     - nbsphinx
     - entrypoints
+    - jupyter-sphinx-theme
+    - recommonmark
