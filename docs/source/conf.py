@@ -14,42 +14,51 @@
 # serve to show the default.
 
 import os
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not on_rtd:  # only import and set the theme if we're building docs locally
+    from jupyter_sphinx_theme import *
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 
-if os.environ.get('READTHEDOCS', ''):
+if on_rtd:
     # RTD doesn't use the repo's Makefile to build docs. We run
     # autogen_config.py to create the config docs (i.e. Configuration Options
     # page).
 
     with open('../autogen_config.py') as f:
         exec(compile(f.read(), 'autogen_config.py', 'exec'), {})
+else:
+    # Add any Sphinx extension module names here, as strings. They can be
+    # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+    # ones.
+    extensions = [
+        'sphinx.ext.autodoc',
+        'sphinx.ext.intersphinx',
+        'sphinx.ext.napoleon',
+        'nbsphinx',
+    ]
+
+    # The suffix(es) of source filenames.
+    # You can specify multiple suffix as a list of string:
+    # source_suffix = ['.rst', '.md']
+    source_suffix = ['.rst', '.ipynb']
+
+    # The name of the Pygments (syntax highlighting) style to use.
+    pygments_style = 'sphinx'
 
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.napoleon',
-    'nbsphinx',
-]
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
-
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-# source_suffix = ['.rst', '.md']
-source_suffix = ['.rst', '.ipynb']
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
@@ -109,9 +118,6 @@ exclude_patterns = ['.ipynb_checkpoints', 'example.ipynb']
 # output. They are ignored by default.
 #show_authors = False
 
-# The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
-
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
 
@@ -126,10 +132,6 @@ todo_include_todos = False
 
 # Set on_rtd to whether we are building on readthedocs.org. We get this line of
 # code grabbed from docs.readthedocs.org
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    from jupyter_sphinx_theme import *
 
 # otherwise, readthedocs.org uses their default theme, so no need to specify it
 
